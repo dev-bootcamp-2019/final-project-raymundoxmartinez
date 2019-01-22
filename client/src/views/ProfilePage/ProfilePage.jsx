@@ -37,6 +37,7 @@ import getWeb3 from "../../util/getWeb3";
 import SupplyChain from "../../contracts/SupplyChain.json";
 
 import ItemCard from 'components/ItemCard';
+import BuyItemModal from './components/BuyItemModal';
 
 class ProfilePage extends React.Component {
   constructor(props) {
@@ -161,14 +162,14 @@ class ProfilePage extends React.Component {
                 </p>
               </div>
               <GridContainer justify="center">
-              <GridItem xs={12} sm={12} md={12} >
-              <Button justIcon round color="primary"><Add style={{color: "#FFFFFF"}}/></Button>
-              </GridItem>
+                <GridItem xs={12} sm={12} md={12} >
+                  <BuyItemModal />
+                </GridItem>
                 <GridItem xs={12} sm={12} md={12} className={classes.navWrapper}>
                   <GridContainer justify="center">
                     <GridItem xs={12} sm={12} md={4}>
-                      
-                      <ItemCard/>
+
+                      <ItemCard />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={4}>
                       <img
