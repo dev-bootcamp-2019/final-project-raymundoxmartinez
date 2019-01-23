@@ -10,9 +10,13 @@ import Add from "@material-ui/icons/Add";
 import AddItemForm from "../forms/AddItemForm";
 
 export default class FormDialog extends React.Component {
-  state = {
-    open: false,
-  };
+  constructor(props){
+    super(props)
+    this.state = {
+      open: false,
+    };
+
+  }
 
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -37,7 +41,7 @@ export default class FormDialog extends React.Component {
               To subscribe to this website, please enter your email address here. We will send
               updates occasionally.
             </DialogContentText>
-            <AddItemForm/>
+            <AddItemForm handleAddItem={this.props.handleAddItem}/>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">

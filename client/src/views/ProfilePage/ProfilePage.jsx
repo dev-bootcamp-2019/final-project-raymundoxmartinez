@@ -48,6 +48,7 @@ class ProfilePage extends React.Component {
       accounts: null,
       contract: null
     }
+    this.addItem =this.addItem.bind(this);
   }
 
   componentDidMount = async () => {
@@ -163,7 +164,7 @@ class ProfilePage extends React.Component {
               </div>
               <GridContainer justify="center">
                 <GridItem xs={12} sm={12} md={12} >
-                  <BuyItemModal />
+                  <BuyItemModal handleAddItem={this.addItem}/>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12} className={classes.navWrapper}>
                   <GridContainer justify="center">
