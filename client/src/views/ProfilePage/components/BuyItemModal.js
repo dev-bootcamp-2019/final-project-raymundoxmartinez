@@ -35,22 +35,13 @@ export default class FormDialog extends React.Component {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogTitle id="form-dialog-title">Add Item</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To subscribe to this website, please enter your email address here. We will send
-              updates occasionally.
+              Add an item to your collection.
             </DialogContentText>
-            <AddItemForm handleAddItem={this.props.handleAddItem}/>
+            <AddItemForm handleAddItem={this.props.handleAddItem} handleClose={this.handleClose}/>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Subscribe
-            </Button>
-          </DialogActions>
         </Dialog>
       </div>
     );

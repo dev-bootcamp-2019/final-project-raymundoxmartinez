@@ -78,7 +78,7 @@ class ProfilePage extends React.Component {
     }
   };
 
-  addItem = async () => {
+  addItem = async (values) => {
     debugger
     const { accounts, contract } = this.state;
 

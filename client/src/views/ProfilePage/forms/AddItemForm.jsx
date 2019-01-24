@@ -11,7 +11,7 @@ import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import InputLabel from '@material-ui/core/InputLabel';
-
+import ImageUpload from '../../../components/ImageUpload'
 
 const styles = () => ({
 
@@ -20,35 +20,26 @@ const styles = () => ({
 
 const validate = values => {
     const errors = {};
-    if (!values.email) {
-        errors.email = "Please enter your email.";
+    if (!values.itemName) {
+        errors.itemName = "Please enter a name for the item.";
     } 
-    if (!values.firstName) {
-        errors.firstName = 'Please enter your first name.';
+    if (!values.price) {
+        errors.price = 'Please enter a price for the item.';
     }
-    if (!values.lastName) {
-        errors.lastName = 'Please enter your last name.';
+    if (!values.image) {handleAddItem
+        errors.image = 'Please insert an image.';
     }
-
     return errors;
 };
 
-class AppointmentForm extends PureComponent {
+class AddItemForm extends PureComponent {
     constructor(props) {
         super(props)
-        this.state = {
-            genderValue: '',
-            preferredTimeOfDay: '',
-
-        }
         this.createRenderer = this.createRenderer.bind(this);
         this.RenderInput = this.RenderInput.bind(this);
-        this.RenderPicker = this.RenderPicker.bind(this);
-        this.RenderRadio = this.RenderRadio.bind(this);
-        this.RenderSelect = this.RenderSelect.bind(this);
+        this.RenderImageUpload = this.RenderImageUpload.bind(this);
+        
     }
-
-
 
     createRenderer = render => ({ input, meta, label, type, ...rest }) => (
         <label className={meta.error && meta.touched ? "error" : ""}>
@@ -61,6 +52,12 @@ class AppointmentForm extends PureComponent {
         </label>
     );
 
+    RenderImageUpload = this.createRenderer((input, label, type) =>
+        <ImageUpload
+            {...input}
+            label={label}
+        />
+    )
     RenderInput = this.createRenderer((input, label, type) =>
         <TextField
             {...input}
@@ -70,40 +67,7 @@ class AppointmentForm extends PureComponent {
             fullWidth={true}
         />
     )
-    RenderPicker = this.createRenderer((input, label, type) =>
-        <TextField
-            {...input}
-            margin="dense"
-            label={label}
-            type={type}
-            fullWidth={true}
-            InputLabelProps={{
-                shrink: true,
-            }}
-        />
-    )
-    RenderRadio = this.createRenderer((input, label, type, ...rest) =>
-        <FormControlLabel   {...input} control={<Radio />} label={label} />
-    )
-    RenderSelect = this.createRenderer((input, label, type, { children }) =>
-        <FormControl>
-            <InputLabel shrink htmlFor="age-native-label-placeholder">
-                {label}
-            </InputLabel>
-            <Select
-                {...input}
-                native
-                inputProps={{
-                    name: 'age',
-                    id: 'age-native-simple',
-                }}
-                input={<Input name="preferredTimeOfDay" id="age-native-label-placeholder" />}
-            >
-                {children}
-            </Select>
-        </FormControl>
-    );
-
+    
     render() {
         const { error, handleSubmit, submitting, classes, pristine, handleAddItem, handleClose } = this.props;
         return (
@@ -114,6 +78,9 @@ class AppointmentForm extends PureComponent {
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Field name="price" label="Price" component={this.RenderInput} />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Field name="image" label="Image" component={this.RenderImageUpload} />
                     </Grid>
                 </Grid>
                 <Button onClick={handleClose} color="primary">
@@ -127,14 +94,14 @@ class AppointmentForm extends PureComponent {
     }
 }
 
-AppointmentForm.propTypes = {
+AddItemForm.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 export default reduxForm({
-    form: 'appointmentForm',
+    form: 'addItemForm',
     destroyOnUnmount: true,
     validate,
-})(withStyles(styles)(AppointmentForm));
+})(withStyles(styles)(AddItemForm));
 
 
 
