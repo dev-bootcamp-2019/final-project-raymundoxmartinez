@@ -32,68 +32,71 @@ import work5 from "assets/img/examples/clem-onojegaw.jpg";
 
 import profilePageStyle from "assets/jss/material-kit-react/views/profilePage.jsx";
 
+import mockItems from "../../mock/mockItems";
 
-import getWeb3 from "../../util/getWeb3";
-import SupplyChain from "../../contracts/SupplyChain.json";
+// import getWeb3 from "../../util/getWeb3";
+// import SupplyChain from "../../contracts/SupplyChain.json";
 
-import ItemCard from 'components/ItemCard';
-import BuyItemModal from './components/BuyItemModal';
+import ItemCard from "components/ItemCard";
+import BuyItemModal from "./components/BuyItemModal";
+import { Grid } from "@material-ui/core";
 
 class ProfilePage extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       itemAdded: null,
       web3: null,
       accounts: null,
       contract: null
-    }
-    this.addItem =this.addItem.bind(this);
+    };
+    this.addItem = this.addItem.bind(this);
   }
 
   componentDidMount = async () => {
-    try {
-      // Get network provider and web3 instance.
-      const web3 = await getWeb3();
+    console.log("test");
+    // try {
+    //   // Get network provider and web3 instance.
+    //   const web3 = await getWeb3();
 
-      // Use web3 to get the user's accounts.
-      const accounts = await web3.eth.getAccounts();
-      // Get the contract instance.
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SupplyChain.networks[networkId];
-      const instance = new web3.eth.Contract(
-        SupplyChain.abi,
-        deployedNetwork && deployedNetwork.address,
-      );
+    //   // Use web3 to get the user's accounts.
+    //   const accounts = await web3.eth.getAccounts();
+    //   // Get the contract instance.
+    //   const networkId = await web3.eth.net.getId();
+    //   const deployedNetwork = SupplyChain.networks[networkId];
+    //   const instance = new web3.eth.Contract(
+    //     SupplyChain.abi,
+    //     deployedNetwork && deployedNetwork.address
+    //   );
 
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance });
-    } catch (error) {
-      // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`,
-      );
-      console.error(error);
-    }
+    //   // Set web3, accounts, and contract to the state, and then proceed with an
+    //   // example of interacting with the contract's methods.
+    //   this.setState({ web3, accounts, contract: instance });
+    // } catch (error) {
+    //   // Catch any errors for any of the above operations.
+    //   alert(
+    //     `Failed to load web3, accounts, or contract. Check console for details.`
+    //   );
+    //   console.error(error);
+    // }
   };
 
-  addItem = async (values) => {
-    debugger
-    const { accounts, contract } = this.state;
+  async addItem(values) {
+    debugger;
+    // const { accounts, contract } = this.state;
 
     // Stores a given value, 5 by default.
-    await contract.methods.addItem('Rolex', 300).send({ from: accounts[0] });
+    // await contract.methods.addItem("Rolex", 300).send({ from: accounts[0] });
 
     // Get the value from the contract to prove it worked.
-    const response = await contract.methods.fetchItem(0).call();
+    // const response = await contract.methods.fetchItem(0).call();
 
     // Update state with the result.
-    this.setState({ itemAdded: response });
-  };
+    // this.setState({ itemAdded: response });
+  }
 
   buyItem = async () => {
-    debugger
+    debugger;
     const { accounts, contract } = this.state;
 
     // Stores a given value, 5 by default.
@@ -101,7 +104,7 @@ class ProfilePage extends React.Component {
 
     // Get the value from the contract to prove it worked.
     const response = await contract.methods.fetchItem(0).call();
-    debugger
+    debugger;
     // Update state with the result.
     this.setState({ itemAdded: response });
   };
@@ -113,7 +116,6 @@ class ProfilePage extends React.Component {
       classes.imgFluid
     );
     const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
-
 
     return (
       <div>
@@ -162,17 +164,37 @@ class ProfilePage extends React.Component {
                   intimate feel with a solid groove structure.{" "}
                 </p>
               </div>
-              <GridContainer justify="center">
-                <GridItem xs={12} sm={12} md={12} >
-                  <BuyItemModal handleAddItem={this.addItem}/>
+              <GridContainer
+                container
+                container
+                direction="row"
+                justify="flex-end"
+                alignItems="center"
+              >
+                <GridItem md={2}>
+                  <div>
+                    <strong>Add Item</strong>
+                  </div>
+                  <div>
+                    <BuyItemModal handleAddItem={this.addItem} />
+                  </div>
                 </GridItem>
-                <GridItem xs={12} sm={12} md={12} className={classes.navWrapper}>
-                  <GridContainer justify="center">
-                    <GridItem xs={12} sm={12} md={4}>
-
-                      <ItemCard />
+                {/* <GridItem md={1}>
+                </GridItem> */}
+              </GridContainer>
+              <GridContainer>
+                <GridContainer
+                  container
+                  direction="row"
+                  justify="space-evenly"
+                  alignItems="flex-start"
+                >
+                  {mockItems.map((item) => (
+                    <GridItem sm={12} md={4}>
+                      <ItemCard key={item.id} />
                     </GridItem>
-                    <GridItem xs={12} sm={12} md={4}>
+                  ))}
+                  {/* <GridItem xs={12} sm={12} md={4}>
                       <img
                         alt="..."
                         src={studio5}
@@ -183,9 +205,8 @@ class ProfilePage extends React.Component {
                         src={studio4}
                         className={navImageClasses}
                       />
-                    </GridItem>
-                  </GridContainer>
-                </GridItem>
+                    </GridItem> */}
+                </GridContainer>
               </GridContainer>
             </div>
           </div>
