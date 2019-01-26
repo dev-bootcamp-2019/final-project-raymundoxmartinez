@@ -10213,10 +10213,16 @@
       "links": {},
       "address": "0x78d2b73f16D655c87f1FEec1D8331B4798bbC2Ce",
       "transactionHash": "0x4136f46b532b7f47db03c8d2f983f4adb98aa44f8ce9ace2275a69112295704a"
+    },
+    "1548528894985": {
+      "events": {},
+      "links": {},
+      "address": "0xb054476453cB38c624d30af962f0dfEA377a174C",
+      "transactionHash": "0x1d6f200c959000eeedd9cb02ea522b4c35fa3eabb01c77522eca35deaf685de6"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-01-21T00:40:50.627Z",
+  "updatedAt": "2019-01-26T18:56:35.318Z",
   "devdoc": {
     "methods": {}
   },

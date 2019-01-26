@@ -49,7 +49,6 @@ export default class ImageUpload extends React.Component {
         const readAsDataURL = reader.result;
         this.setState({
           files: files.map((file) => {
-            debugger;
             return Object.assign(file, {
               preview: URL.createObjectURL(file)
             });

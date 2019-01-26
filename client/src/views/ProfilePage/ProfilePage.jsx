@@ -1,6 +1,8 @@
 import React from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
+
+import { connect } from 'react-redux';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
@@ -34,14 +36,14 @@ import profilePageStyle from "assets/jss/material-kit-react/views/profilePage.js
 
 import mockItems from "../../mock/mockItems";
 
-// import getWeb3 from "../../util/getWeb3";
-// import SupplyChain from "../../contracts/SupplyChain.json";
+import getWeb3 from "../../util/getWeb3";
+import SupplyChain from "../../contracts/SupplyChain.json";
 
 import ItemCard from "components/ItemCard";
 import BuyItemModal from "./components/BuyItemModal";
 import { Grid } from "@material-ui/core";
 
-class ProfilePage extends React.Component {
+class ConnectedProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,48 +53,51 @@ class ProfilePage extends React.Component {
       contract: null
     };
     this.addItem = this.addItem.bind(this);
+    this.buyItem = this.buyItem.bind(this);
   }
 
   componentDidMount = async () => {
     console.log("test");
-    // try {
-    //   // Get network provider and web3 instance.
-    //   const web3 = await getWeb3();
+    try {
+      // Get network provider and web3 instance.
+      const web3 = await getWeb3();
 
-    //   // Use web3 to get the user's accounts.
-    //   const accounts = await web3.eth.getAccounts();
-    //   // Get the contract instance.
-    //   const networkId = await web3.eth.net.getId();
-    //   const deployedNetwork = SupplyChain.networks[networkId];
-    //   const instance = new web3.eth.Contract(
-    //     SupplyChain.abi,
-    //     deployedNetwork && deployedNetwork.address
-    //   );
+      // Use web3 to get the user's accounts.
+      const accounts = await web3.eth.getAccounts();
+      // Get the contract instance.
+      const networkId = await web3.eth.net.getId();
+      const deployedNetwork = SupplyChain.networks[networkId];
+      const instance = new web3.eth.Contract(
+        SupplyChain.abi,
+        deployedNetwork && deployedNetwork.address
+      );
 
-    //   // Set web3, accounts, and contract to the state, and then proceed with an
-    //   // example of interacting with the contract's methods.
-    //   this.setState({ web3, accounts, contract: instance });
-    // } catch (error) {
-    //   // Catch any errors for any of the above operations.
-    //   alert(
-    //     `Failed to load web3, accounts, or contract. Check console for details.`
-    //   );
-    //   console.error(error);
-    // }
+      // Set web3, accounts, and contract to the state, and then proceed with an
+      // example of interacting with the contract's methods.
+      this.setState({ web3, accounts, contract: instance });
+    } catch (error) {
+      // Catch any errors for any of the above operations.
+      alert(
+        `Failed to load web3, accounts, or contract. Check console for details.`
+      );
+      console.error(error);
+    }
   };
 
-  async addItem(values) {
+  async addItem() {
     debugger;
-    // const { accounts, contract } = this.state;
+    const { accounts, contract } = this.state;
+    const {itemData} = this.props;
 
     // Stores a given value, 5 by default.
-    // await contract.methods.addItem("Rolex", 300).send({ from: accounts[0] });
+    await contract.methods.addItem(itemData.name, itemData.price).send({ from: accounts[0] });
 
     // Get the value from the contract to prove it worked.
-    // const response = await contract.methods.fetchItem(0).call();
+    const response = await contract.methods.fetchItem(0).call();
+    debugger
 
     // Update state with the result.
-    // this.setState({ itemAdded: response });
+    this.setState({ itemAdded: response });
   }
 
   buyItem = async () => {
@@ -217,4 +222,12 @@ class ProfilePage extends React.Component {
   }
 }
 
-export default withStyles(profilePageStyle)(ProfilePage);
+const mapStateToProps = state => (
+  {
+    itemData: !(state.form.addItemForm === undefined) ? state.form.addItemForm.values : null,
+  }
+);
+
+const ProfilePage = connect(mapStateToProps, null)(withStyles(profilePageStyle)(ConnectedProfilePage));
+
+export default ProfilePage;

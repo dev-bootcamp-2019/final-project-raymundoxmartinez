@@ -66,8 +66,8 @@ class AddItemForm extends PureComponent {
       submitting,
       classes,
       pristine,
-      handleAddItem,
-      handleClose
+      handleClose,
+      handleAddItem
     } = this.props;
     return (
       <form
