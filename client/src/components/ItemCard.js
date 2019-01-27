@@ -17,19 +17,19 @@ const style = {
 
 class Cards extends React.Component {
   render() {
-    const { classes } = this.props;
+    const { classes, price, image,name } = this.props;
     return (
       <Card style={{width: "20rem"}}>
         <img
           style={{height: "180px", width: "100%", display: "block"}}
           className={classes.imgCardTop}
-          src="..."
+          src={image}
           alt="Card-img-cap"
         />
         <CardBody>
-          <h4 className={classes.cardTitle}>Card title</h4>
-          <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <Button color="primary">Do something</Button>
+          <h4 className={classes.cardTitle}>{name}</h4>
+          <p>{price}</p>
+          <Button color="primary">Buy</Button>
         </CardBody>
       </Card>
     );

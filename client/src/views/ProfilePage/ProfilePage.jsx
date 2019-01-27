@@ -38,19 +38,26 @@ import mockItems from "../../mock/mockItems";
 
 import getWeb3 from "../../util/getWeb3";
 import SupplyChain from "../../contracts/SupplyChain.json";
+import SimpleAuction from "../../contracts/SimpleAuction.json";
 
 import ItemCard from "components/ItemCard";
 import BuyItemModal from "./components/BuyItemModal";
 import { Grid } from "@material-ui/core";
+
+
+const CryptoJS = require('crypto-js');
 
 class ConnectedProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       itemAdded: null,
+      items: [],
+      totalItems: 0,
       web3: null,
       accounts: null,
-      contract: null
+      supplyChainContract: null,
+      simpleAuctionContract: null,
     };
     this.addItem = this.addItem.bind(this);
     this.buyItem = this.buyItem.bind(this);
@@ -66,38 +73,65 @@ class ConnectedProfilePage extends React.Component {
       const accounts = await web3.eth.getAccounts();
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SupplyChain.networks[networkId];
-      const instance = new web3.eth.Contract(
+      const supplyChainDeployedNetwork = SupplyChain.networks[networkId];
+      const SupplyChainContractInstance = new web3.eth.Contract(
         SupplyChain.abi,
-        deployedNetwork && deployedNetwork.address
+        supplyChainDeployedNetwork && supplyChainDeployedNetwork.address
       );
-
+      const simpleAuctionDeployedNetwork = SimpleAuction.networks[networkId];
+      const SimpleAuctionContractInstance = new web3.eth.Contract(
+        SimpleAuction.abi,
+        simpleAuctionDeployedNetwork && simpleAuctionDeployedNetwork.address
+      );
+      debugger
+      const totalItems = await SupplyChainContractInstance.methods.skuCount().call();
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance });
+      this.setState({
+        web3,
+        accounts,
+        supplyChainContract: SupplyChainContractInstance,
+        simpleAuctionContract: SimpleAuctionContractInstance,
+        totalItems: totalItems,
+      });
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
         `Failed to load web3, accounts, or contract. Check console for details.`
       );
       console.error(error);
+    } finally {
+      this.fetchItems();
     }
   };
 
+  async fetchItems() {
+    const { supplyChainContract, totalItems } = this.state;
+    let itemsArray = [];
+    // Retrieve Items
+    for (let i = 0; i < totalItems; i++) {
+      const item = await supplyChainContract.methods.fetchItem(i).call();
+      debugger
+      itemsArray.push(item);
+    }
+    // Update state with the result.
+    this.setState({ items: itemsArray });
+  }
+
   async addItem() {
+    const { accounts, supplyChainContract, totalItems } = this.state;
+    const { itemData } = this.props;
     debugger;
-    const { accounts, contract } = this.state;
-    const {itemData} = this.props;
 
     // Stores a given value, 5 by default.
-    await contract.methods.addItem(itemData.name, itemData.price).send({ from: accounts[0] });
+    await supplyChainContract.methods.addItem(itemData.itemName, itemData.price, itemData.image).send({ from: accounts[0] });
 
     // Get the value from the contract to prove it worked.
-    const response = await contract.methods.fetchItem(0).call();
+    const response = await supplyChainContract.methods.fetchItem(parseInt(totalItems) === 0 ? 0 : parseInt(totalItems) + 1).call();
     debugger
 
     // Update state with the result.
-    this.setState({ itemAdded: response });
+    this.setState((prevState) => { items: prevState.items.push(response) });
   }
 
   buyItem = async () => {
@@ -113,8 +147,14 @@ class ConnectedProfilePage extends React.Component {
     // Update state with the result.
     this.setState({ itemAdded: response });
   };
+
+  makeBid() {
+
+  }
   render() {
     const { classes, ...rest } = this.props;
+    const { items } = this.state;
+    debugger
     const imageClasses = classNames(
       classes.imgRaised,
       classes.imgRoundedCircle,
@@ -122,6 +162,25 @@ class ConnectedProfilePage extends React.Component {
     );
     const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
+    let itemList;
+    if (items.length === 0) {
+      itemList = (
+        <GridItem sm={12} md={12}>
+          <div>There aren't any items available. Click the cross above to add an item.</div>
+        </GridItem>
+      )
+    } else {
+      itemList= items.map((item) => (
+        <GridItem sm={12} md={4}>
+          <ItemCard 
+          key={item.sku} 
+          name={item.name}
+          image={item.image}
+          price={item.price}
+          />
+        </GridItem>
+      ))
+    }
     return (
       <div>
         <Header
@@ -194,23 +253,7 @@ class ConnectedProfilePage extends React.Component {
                   justify="space-evenly"
                   alignItems="flex-start"
                 >
-                  {mockItems.map((item) => (
-                    <GridItem sm={12} md={4}>
-                      <ItemCard key={item.id} />
-                    </GridItem>
-                  ))}
-                  {/* <GridItem xs={12} sm={12} md={4}>
-                      <img
-                        alt="..."
-                        src={studio5}
-                        className={navImageClasses}
-                      />
-                      <img
-                        alt="..."
-                        src={studio4}
-                        className={navImageClasses}
-                      />
-                    </GridItem> */}
+                  {itemList}
                 </GridContainer>
               </GridContainer>
             </div>

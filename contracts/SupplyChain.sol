@@ -12,7 +12,7 @@ contract SupplyChain {
     address payable owner;
 
   /* Add a variable called skuCount to track the most recent sku # */
-    uint skuCount;
+    uint public skuCount;
   /* Add a line that creates a public mapping that maps the SKU (a number) to an Item.
      Call this mappings items
   */
@@ -41,6 +41,7 @@ contract SupplyChain {
       string name;
       uint sku;
       uint price;
+      string image;
       State state;
       address payable seller;
       address payable buyer;
@@ -95,9 +96,9 @@ contract SupplyChain {
        skuCount = 0;
   }
 
-  function addItem(string memory _name, uint _price) public {
+  function addItem(string memory _name, uint _price, string memory _image) public {
     emit ForSale(skuCount);
-    items[skuCount] = Item({name: _name, sku:skuCount, price: _price, state: State.ForSale, seller: msg.sender, buyer: address(0)});
+    items[skuCount] = Item({name: _name, sku:skuCount, price: _price, image: _image, state: State.ForSale, seller: msg.sender, buyer: address(0)});
     skuCount = skuCount + 1;
   }
 
@@ -143,14 +144,15 @@ contract SupplyChain {
   }
 
   /* We have these functions completed so we can run tests, just ignore it :) */
-  function fetchItem(uint _sku) public view returns (string memory name, uint sku, uint price, uint state, address seller, address buyer) {
+  function fetchItem(uint _sku) public view returns (string memory name, uint sku, uint price, uint state, address seller, address buyer, string memory image) {
     name = items[_sku].name;
     sku = items[_sku].sku;
     price = items[_sku].price;
     state = uint(items[_sku].state);
     seller = items[_sku].seller;
     buyer = items[_sku].buyer;
-    return (name, sku, price, state, seller, buyer);
+    image = items[_sku].image;
+    return (name, sku, price, state, seller, buyer, image);
   }
 
 }
