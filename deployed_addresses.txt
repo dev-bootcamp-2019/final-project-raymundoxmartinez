@@ -1,0 +1,4 @@
+The contracts were deployed to the ropsten test network
+
+SupplyChain contractAddress:0x681350c54c78953b6a5aceeb9f075b9c78e37052 
+Mortal contractAddress: 0x1d8f053bf26fc50cc28a72b30c709494c7502c74 
