@@ -1,0 +1,26 @@
+{
+  "name": "final-project-raymundoxmartinez",
+  "version": "1.0.0",
+  "description": "final project",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "truffle-assertions": "^0.7.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dev-bootcamp-2019/final-project-raymundoxmartinez.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dev-bootcamp-2019/final-project-raymundoxmartinez/issues"
+  },
+  "homepage": "https://github.com/dev-bootcamp-2019/final-project-raymundoxmartinez#readme"
+}
