@@ -4,13 +4,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import Radio from "@material-ui/core/Radio";
 import Button from "@material-ui/core/Button";
-import Select from "@material-ui/core/Select";
-import Input from "@material-ui/core/Input";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import InputLabel from "@material-ui/core/InputLabel";
 import ImageUpload from "../../../components/ImageUpload";
 
 const styles = () => ({});
@@ -61,10 +55,8 @@ class AddItemForm extends PureComponent {
 
   render() {
     const {
-      error,
       handleSubmit,
       submitting,
-      classes,
       pristine,
       handleClose,
       handleAddItem

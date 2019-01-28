@@ -73,7 +73,7 @@ export default class ImageUpload extends React.Component {
     const thumbs = files.map((file) => (
       <div style={thumb} key={file.name}>
         <div style={thumbInner}>
-          <img src={file.preview} style={img} />
+          <img src={file.preview} style={img} alt='' />
         </div>
       </div>
     ));

@@ -6,35 +6,16 @@ import { connect } from 'react-redux';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
-import Add from "@material-ui/icons/Add";
-import Palette from "@material-ui/icons/Palette";
-import Favorite from "@material-ui/icons/Favorite";
 // core components
 import Header from "components/Header/Header.jsx";
-import Footer from "components/Footer/Footer.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import HeaderLinks from "components/Header/HeaderLinks.jsx";
-import NavPills from "components/NavPills/NavPills.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 
-import profile from "assets/img/faces/christian.jpg";
-
-import studio1 from "assets/img/examples/studio-1.jpg";
-import studio2 from "assets/img/examples/studio-2.jpg";
-import studio3 from "assets/img/examples/studio-3.jpg";
-import studio4 from "assets/img/examples/studio-4.jpg";
-import studio5 from "assets/img/examples/studio-5.jpg";
-import work1 from "assets/img/examples/olu-eletu.jpg";
-import work2 from "assets/img/examples/clem-onojeghuo.jpg";
-import work3 from "assets/img/examples/cynthia-del-rio.jpg";
-import work4 from "assets/img/examples/mariya-georgieva.jpg";
-import work5 from "assets/img/examples/clem-onojegaw.jpg";
+import shop from "assets/img/shop.png";
 
 import profilePageStyle from "assets/jss/material-kit-react/views/profilePage.jsx";
-
-import mockItems from "../../mock/mockItems";
 
 import getWeb3 from "../../util/getWeb3";
 import SupplyChain from "../../contracts/SupplyChain.json";
@@ -42,9 +23,6 @@ import SimpleAuction from "../../contracts/SimpleAuction.json";
 
 import ItemCard from "components/ItemCard";
 import AddItemModal from "./components/AddItemModal";
-
-
-const CryptoJS = require('crypto-js');
 
 class ConnectedProfilePage extends React.Component {
   constructor(props) {
@@ -116,7 +94,7 @@ class ConnectedProfilePage extends React.Component {
   }
 
   async addItem() {
-    const { accounts, supplyChainContract, totalItems, items } = this.state;
+    const { accounts, supplyChainContract, items } = this.state;
     const { itemData } = this.props;
 
     // Stores a given value, 5 by default.
@@ -127,8 +105,8 @@ class ConnectedProfilePage extends React.Component {
     debugger
 
     // Update state with the result.
-    this.setState((prevState) => { 
-      return {items: [...prevState.items, response] }
+    this.setState((prevState) => {
+      return { items: [...prevState.items, response] }
     });
   }
 
@@ -137,7 +115,7 @@ class ConnectedProfilePage extends React.Component {
     debugger;
 
     // Stores a given value, 5 by default.
-    await supplyChainContract.methods.buyItem(parseInt(sku)).send({ from: accounts[0], value: price }, (err, res)=>{
+    await supplyChainContract.methods.buyItem(parseInt(sku)).send({ from: accounts[0], value: price }, (err, res) => {
       console.log(err)
       debugger
     });
@@ -146,11 +124,11 @@ class ConnectedProfilePage extends React.Component {
     const updatedItem = await supplyChainContract.methods.fetchItem(sku).call();
     debugger;
     // Update state with the result.
-    this.setState((prevState) => { 
+    this.setState((prevState) => {
       debugger
-      prevState.items[sku]= updatedItem
+      prevState.items[sku] = updatedItem
       return {
-        items:prevState.items
+        items: prevState.items
       }
     }
     );
@@ -167,7 +145,6 @@ class ConnectedProfilePage extends React.Component {
       classes.imgRoundedCircle,
       classes.imgFluid
     );
-    const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
     let itemList;
     if (items.length === 0) {
@@ -196,7 +173,6 @@ class ConnectedProfilePage extends React.Component {
         <Header
           color="transparent"
           brand="Market Place"
-          rightLinks={<HeaderLinks />}
           fixed
           changeColorOnScroll={{
             height: 200,
@@ -212,10 +188,10 @@ class ConnectedProfilePage extends React.Component {
                 <GridItem xs={12} sm={12} md={6}>
                   <div className={classes.profile}>
                     <div>
-                      <img src={profile} alt="..." className={imageClasses} />
+                      <img src={shop} alt="..." className={imageClasses} />
                     </div>
                     <div className={classes.name}>
-                      <h3 className={classes.title}>Christian Louboutin</h3>
+                      <h3 className={classes.title}>Your Store.</h3>
                       <h6>Merchant</h6>
                       <Button justIcon link className={classes.margin5}>
                         <i className={"fab fa-twitter"} />
@@ -231,15 +207,15 @@ class ConnectedProfilePage extends React.Component {
                 </GridItem>
               </GridContainer>
               <div className={classes.description}>
-                <p>
-                  An artist of considerable range, Chet Faker — the name taken
-                  by Melbourne-raised, Brooklyn-based Nick Murphy — writes,
-                  performs and records all of his own music, giving it a warm,
-                  intimate feel with a solid groove structure.{" "}
-                </p>
+                Add an item to the blockchain.
+                <ul style={{listStyleType:'none'}}>
+                  <li>1. Click on the cross below to begin</li>
+                  <li>2. Provide a Name</li>
+                  <li>3. Provide a Price</li>
+                  <li>4. Provide an image less than or equal to 6kbs</li>
+                </ul>
               </div>
               <GridContainer
-                container
                 container
                 direction="row"
                 justify="flex-end"
@@ -253,8 +229,6 @@ class ConnectedProfilePage extends React.Component {
                     <AddItemModal handleAddItem={this.addItem} />
                   </div>
                 </GridItem>
-                {/* <GridItem md={1}>
-                </GridItem> */}
               </GridContainer>
               <GridContainer>
                 <GridContainer
@@ -269,7 +243,6 @@ class ConnectedProfilePage extends React.Component {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
