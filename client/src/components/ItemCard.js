@@ -17,7 +17,14 @@ const style = {
 
 class Cards extends React.Component {
   render() {
-    const { classes, price, image,name } = this.props;
+    const { classes, price, image,name, sku, state } = this.props;
+    debugger
+    let button;
+    if(parseInt(state) === 0){
+      button =  <Button onClick= {()=>this.props.handleBuyItem(sku, price)} color="primary">Buy</Button>;
+    } else{
+      button =  <Button disabled={true} color="rose">Sold</Button>
+    }
     return (
       <Card style={{width: "20rem"}}>
         <img
@@ -28,8 +35,8 @@ class Cards extends React.Component {
         />
         <CardBody>
           <h4 className={classes.cardTitle}>{name}</h4>
-          <p>{price}</p>
-          <Button color="primary">Buy</Button>
+          <p>$ {price}</p>
+         {button}
         </CardBody>
       </Card>
     );

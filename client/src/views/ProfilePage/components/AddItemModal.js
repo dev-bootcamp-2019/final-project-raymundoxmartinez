@@ -9,7 +9,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Add from "@material-ui/icons/Add";
 import AddItemForm from "../forms/AddItemForm";
 
-export default class FormDialog extends React.Component {
+export default class AddItemModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

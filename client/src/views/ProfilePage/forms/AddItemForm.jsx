@@ -97,7 +97,7 @@ class AddItemForm extends PureComponent {
           Cancel
         </Button>
         <Button type="submit" disabled={pristine || submitting} color="primary">
-          Request
+          Add
         </Button>
       </form>
     );

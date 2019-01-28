@@ -41,8 +41,7 @@ import SupplyChain from "../../contracts/SupplyChain.json";
 import SimpleAuction from "../../contracts/SimpleAuction.json";
 
 import ItemCard from "components/ItemCard";
-import BuyItemModal from "./components/BuyItemModal";
-import { Grid } from "@material-ui/core";
+import AddItemModal from "./components/AddItemModal";
 
 
 const CryptoJS = require('crypto-js');
@@ -60,7 +59,7 @@ class ConnectedProfilePage extends React.Component {
       simpleAuctionContract: null,
     };
     this.addItem = this.addItem.bind(this);
-    this.buyItem = this.buyItem.bind(this);
+    this.handleBuyItem = this.handleBuyItem.bind(this);
   }
 
   componentDidMount = async () => {
@@ -83,7 +82,6 @@ class ConnectedProfilePage extends React.Component {
         SimpleAuction.abi,
         simpleAuctionDeployedNetwork && simpleAuctionDeployedNetwork.address
       );
-      debugger
       const totalItems = await SupplyChainContractInstance.methods.skuCount().call();
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -111,7 +109,6 @@ class ConnectedProfilePage extends React.Component {
     // Retrieve Items
     for (let i = 0; i < totalItems; i++) {
       const item = await supplyChainContract.methods.fetchItem(i).call();
-      debugger
       itemsArray.push(item);
     }
     // Update state with the result.
@@ -119,33 +116,44 @@ class ConnectedProfilePage extends React.Component {
   }
 
   async addItem() {
-    const { accounts, supplyChainContract, totalItems } = this.state;
+    const { accounts, supplyChainContract, totalItems, items } = this.state;
     const { itemData } = this.props;
-    debugger;
 
     // Stores a given value, 5 by default.
     await supplyChainContract.methods.addItem(itemData.itemName, itemData.price, itemData.image).send({ from: accounts[0] });
 
     // Get the value from the contract to prove it worked.
-    const response = await supplyChainContract.methods.fetchItem(parseInt(totalItems) === 0 ? 0 : parseInt(totalItems) + 1).call();
+    const response = await supplyChainContract.methods.fetchItem(items.length).call();
     debugger
 
     // Update state with the result.
-    this.setState((prevState) => { items: prevState.items.push(response) });
+    this.setState((prevState) => { 
+      return {items: [...prevState.items, response] }
+    });
   }
 
-  buyItem = async () => {
+  handleBuyItem = async (sku, price) => {
+    const { accounts, supplyChainContract } = this.state;
     debugger;
-    const { accounts, contract } = this.state;
 
     // Stores a given value, 5 by default.
-    await contract.methods.buyItem(0).send({ from: accounts[0] });
+    await supplyChainContract.methods.buyItem(parseInt(sku)).send({ from: accounts[0], value: price }, (err, res)=>{
+      console.log(err)
+      debugger
+    });
 
     // Get the value from the contract to prove it worked.
-    const response = await contract.methods.fetchItem(0).call();
+    const updatedItem = await supplyChainContract.methods.fetchItem(sku).call();
     debugger;
     // Update state with the result.
-    this.setState({ itemAdded: response });
+    this.setState((prevState) => { 
+      debugger
+      prevState.items[sku]= updatedItem
+      return {
+        items:prevState.items
+      }
+    }
+    );
   };
 
   makeBid() {
@@ -154,7 +162,6 @@ class ConnectedProfilePage extends React.Component {
   render() {
     const { classes, ...rest } = this.props;
     const { items } = this.state;
-    debugger
     const imageClasses = classNames(
       classes.imgRaised,
       classes.imgRoundedCircle,
@@ -170,13 +177,16 @@ class ConnectedProfilePage extends React.Component {
         </GridItem>
       )
     } else {
-      itemList= items.map((item) => (
-        <GridItem sm={12} md={4}>
-          <ItemCard 
-          key={item.sku} 
-          name={item.name}
-          image={item.image}
-          price={item.price}
+      itemList = items.map((item) => (
+        <GridItem key={item.sku} sm={12} md={4}>
+          <ItemCard
+            key={item.sku}
+            name={item.name}
+            image={item.image}
+            price={item.price}
+            sku={item.sku}
+            state={item.state}
+            handleBuyItem={this.handleBuyItem}
           />
         </GridItem>
       ))
@@ -240,7 +250,7 @@ class ConnectedProfilePage extends React.Component {
                     <strong>Add Item</strong>
                   </div>
                   <div>
-                    <BuyItemModal handleAddItem={this.addItem} />
+                    <AddItemModal handleAddItem={this.addItem} />
                   </div>
                 </GridItem>
                 {/* <GridItem md={1}>
