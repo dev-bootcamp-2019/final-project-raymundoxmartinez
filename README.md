@@ -13,6 +13,7 @@ To start the app on a local server follow the following steps:
 - npm start
 - on your browser you will see the login page
 - click enter
+- reload page if not connecting with metamask
 - click on the cross to begin adding items
   ***make sure the image you are adding is small about 6kbs***
   ***the smaller the better***
