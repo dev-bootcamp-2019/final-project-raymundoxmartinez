@@ -22,6 +22,7 @@ import SupplyChain from "../../contracts/SupplyChain.json";
 
 import ItemCard from "components/ItemCard";
 import AddItemModal from "./components/AddItemModal";
+import SectionNotifications from '../Components/Sections/SectionNotifications';
 
 class ConnectedProfilePage extends React.Component {
   constructor(props) {
@@ -53,7 +54,7 @@ class ConnectedProfilePage extends React.Component {
         SupplyChain.abi,
         supplyChainDeployedNetwork && supplyChainDeployedNetwork.address
       );
-     
+
       const totalItems = await SupplyChainContractInstance.methods.skuCount().call();
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -125,7 +126,7 @@ class ConnectedProfilePage extends React.Component {
   }
   render() {
     const { classes, ...rest } = this.props;
-    const { items, accounts} = this.state;
+    const { items, accounts } = this.state;
     const imageClasses = classNames(
       classes.imgRaised,
       classes.imgRoundedCircle,
@@ -136,7 +137,7 @@ class ConnectedProfilePage extends React.Component {
     if (items.length === 0) {
       itemList = (
         <GridItem sm={12} md={12}>
-          <div>There aren't any items available. Click the cross above to add an item.</div>
+          <SectionNotifications />
         </GridItem>
       )
     } else {
@@ -178,7 +179,7 @@ class ConnectedProfilePage extends React.Component {
                     </div>
                     <div className={classes.name}>
                       <h3 className={classes.title}>Your Store.</h3>
-                      <h6> {accounts!== null? `Welcome: ${accounts[0]}` : "Please make sure you have copied the mnemonic into Metamask and signed in."}</h6>
+                      <h6> {accounts !== null ? `Welcome: ${accounts[0]}` : "Please make sure you have copied the mnemonic into Metamask and signed in."}</h6>
                       <Button justIcon link className={classes.margin5}>
                         <i className={"fab fa-twitter"} />
                       </Button>
@@ -194,7 +195,7 @@ class ConnectedProfilePage extends React.Component {
               </GridContainer>
               <div className={classes.description}>
                 Add an item to the blockchain.
-                <ul style={{listStyleType:'none'}}>
+                <ul style={{ listStyleType: 'none' }}>
                   <li>1. Click on the cross below to begin</li>
                   <li>2. Provide a Name</li>
                   <li>3. Provide a Price</li>

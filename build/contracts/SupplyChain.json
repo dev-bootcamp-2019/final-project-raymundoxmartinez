@@ -8297,10 +8297,16 @@
       "links": {},
       "address": "0x0AC11D4F0B6A23c0A218f6Adccd7C401d988321b",
       "transactionHash": "0x566a16887521b528698a2cb9c2a385bac6ad5e8aafbc33c2861a9d518aab6949"
+    },
+    "1548672446994": {
+      "events": {},
+      "links": {},
+      "address": "0x88577D22eee1f11845045F4eF42A052314371CB4",
+      "transactionHash": "0x823db45e85e41268ae33417294fc15015d8101320776066b38c3dc7624713b8b"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-01-28T09:33:27.619Z",
+  "updatedAt": "2019-01-28T10:48:12.700Z",
   "devdoc": {
     "methods": {
       "addItem(string,uint256,string)": {
