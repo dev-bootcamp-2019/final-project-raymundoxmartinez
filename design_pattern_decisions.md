@@ -1,0 +1,3 @@
+In my design I have implemented the mortal design pattern because I want to provide the owner of the contract the ability to destroy the contract and remove it from the blockchain. 
+
+I have also implemented the circuit breaker design pattern that allows the cotnract functionality to be stopped. This is a helpful tool in case a bug is detected and freexing the contract would be beneficial for reducing harm before a fix can be implemented.

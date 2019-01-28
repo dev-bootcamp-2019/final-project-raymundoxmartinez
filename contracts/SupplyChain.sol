@@ -2,7 +2,7 @@
 
 pragma solidity ^0.5.0;
 
-/** @ title Supply Chain. */
+/** @title Supply Chain. */
 contract SupplyChain {
 
   address payable owner;

@@ -18,7 +18,6 @@ const style = {
 class Cards extends React.Component {
   render() {
     const { classes, price, image,name, sku, state } = this.props;
-    debugger
     let button;
     if(parseInt(state) === 0){
       button =  <Button onClick= {()=>this.props.handleBuyItem(sku, price)} color="primary">Buy</Button>;

@@ -19,7 +19,6 @@ import profilePageStyle from "assets/jss/material-kit-react/views/profilePage.js
 
 import getWeb3 from "../../util/getWeb3";
 import SupplyChain from "../../contracts/SupplyChain.json";
-import SimpleAuction from "../../contracts/SimpleAuction.json";
 
 import ItemCard from "components/ItemCard";
 import AddItemModal from "./components/AddItemModal";
@@ -34,7 +33,6 @@ class ConnectedProfilePage extends React.Component {
       web3: null,
       accounts: null,
       supplyChainContract: null,
-      simpleAuctionContract: null,
     };
     this.addItem = this.addItem.bind(this);
     this.handleBuyItem = this.handleBuyItem.bind(this);
@@ -55,11 +53,7 @@ class ConnectedProfilePage extends React.Component {
         SupplyChain.abi,
         supplyChainDeployedNetwork && supplyChainDeployedNetwork.address
       );
-      const simpleAuctionDeployedNetwork = SimpleAuction.networks[networkId];
-      const SimpleAuctionContractInstance = new web3.eth.Contract(
-        SimpleAuction.abi,
-        simpleAuctionDeployedNetwork && simpleAuctionDeployedNetwork.address
-      );
+     
       const totalItems = await SupplyChainContractInstance.methods.skuCount().call();
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -67,7 +61,6 @@ class ConnectedProfilePage extends React.Component {
         web3,
         accounts,
         supplyChainContract: SupplyChainContractInstance,
-        simpleAuctionContract: SimpleAuctionContractInstance,
         totalItems: totalItems,
       });
     } catch (error) {
@@ -102,7 +95,6 @@ class ConnectedProfilePage extends React.Component {
 
     // Get the value from the contract to prove it worked.
     const response = await supplyChainContract.methods.fetchItem(items.length).call();
-    debugger
 
     // Update state with the result.
     this.setState((prevState) => {
@@ -112,20 +104,14 @@ class ConnectedProfilePage extends React.Component {
 
   handleBuyItem = async (sku, price) => {
     const { accounts, supplyChainContract } = this.state;
-    debugger;
 
     // Stores a given value, 5 by default.
-    await supplyChainContract.methods.buyItem(parseInt(sku)).send({ from: accounts[0], value: price }, (err, res) => {
-      console.log(err)
-      debugger
-    });
+    await supplyChainContract.methods.buyItem(parseInt(sku)).send({ from: accounts[0], value: price });
 
     // Get the value from the contract to prove it worked.
     const updatedItem = await supplyChainContract.methods.fetchItem(sku).call();
-    debugger;
     // Update state with the result.
     this.setState((prevState) => {
-      debugger
       prevState.items[sku] = updatedItem
       return {
         items: prevState.items
@@ -139,7 +125,7 @@ class ConnectedProfilePage extends React.Component {
   }
   render() {
     const { classes, ...rest } = this.props;
-    const { items } = this.state;
+    const { items, accounts} = this.state;
     const imageClasses = classNames(
       classes.imgRaised,
       classes.imgRoundedCircle,
@@ -192,7 +178,7 @@ class ConnectedProfilePage extends React.Component {
                     </div>
                     <div className={classes.name}>
                       <h3 className={classes.title}>Your Store.</h3>
-                      <h6>Merchant</h6>
+                      <h6> {accounts!== null? `Welcome: ${accounts[0]}` : "Please make sure you have copied the mnemonic into Metamask and signed in."}</h6>
                       <Button justIcon link className={classes.margin5}>
                         <i className={"fab fa-twitter"} />
                       </Button>
